@@ -1,4 +1,8 @@
 <?php
+	function goto_link($location){
+		header("Location: ".$location);
+		exit;
+	}
    $username = "root";
    $servername = "localhost";
    $password = "";
@@ -6,15 +10,28 @@
 
    $con = mysqli_connect($servername, $username, $password, $db_name);
    if (!$con) {
-   	 die("Faled to connect to the local server". mysqli_connect_error());
+   	 die("Failed to connect to the local server". mysqli_connect_error());
    }
    if (isset($_POST["submit"])) {
    	 if (!empty($_POST["username"]) && !empty($_POST["age"]) && !empty($_POST["pass"])) {
-   	 	$_POST["pass"] = md5($_POST["pass"]);
-   	 	$query = "insert into registration values ('". $_POST["username"] ."'," . $_POST["age"] . ",'" . $_POST["pass"] ."')";
+		 
+		$age = $_POST["age"];
+		$uname= $_POST["username"];
+   	 	$passw = md5($_POST["pass"]);
+	 
+		
+   	 	$query = "INSERT INTO eshna VALUES(null, '$age','$uname', '$passw')";
    	 	mysqli_query($con, $query);
-   	 }
-   	 header("Location: regdata.php");
+		
+		echo "Data insert succesfully";
+		
+   	 }else{
+		 echo "Fill the form first";
+	 }
+   	 
+   }
+   if(isset($_POST["view"])) {
+	   goto_link("regdata.php");
    }
 ?>
 
@@ -51,6 +68,7 @@
     		</tr>
     		<tr>
     			<td colspan="2" align="right">
+    				<input type="submit" name="view" value="view">
     				<input type="submit" name="submit" value="Okay">
     			</td>
     		</tr>
